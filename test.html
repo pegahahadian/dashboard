@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<body>
+
+<h2>Vue.js</h2>
+
+<div id="app">
+  <p>{{ message }}</p>
+  <p><input v-model="message"></p>
+</div>
+<!-- V Binding -->
+<div id="bind">
+    <ul>
+      <li v-for="x in todos">
+        {{ x.text }}
+      </li>
+    </ul>
+  </div>
+<p>
+<button onclick="myFunction()">Click Me!</button>
+</p>
+
+<script>
+var myObject = new Vue({
+  el: '#app',
+  data: {message: 'Hello Vue!'}
+})
+
+function myFunction() {
+    myObject.message = "Hello Pegah Ahadian from Vue Js :)";
+}
+// V Binding
+myObjectbind = new Vue({
+  el: '#bind',
+  data: {
+    todos: [
+      { text: 'Learn JavaScript' },
+      { text: 'Learn Vue.js' },
+      { text: 'Build Something Awesome' }
+    ]
+  }
+})
+</script>
+
+</body>
+    
