@@ -1,51 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="favicon.ico">
-    <title>Vue App</title>
-  </head>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <body>
-<div id="app">
-  <p>{{ message }}</p>
-  <p><input v-model="message"></p>
+</!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/calculator.css">
+</head>
+<body>
+
+<div id="calculator">
+	<!-- Screen and clear key -->
+	<div class="top">
+		<span class="clear" v-on:click="kpress">C</span>
+		<input class="screen" v-model="current" />
+	</div>
+	
+	<div class="keys">
+		<!-- operators and other keys -->
+		<span v-on:click="kpress">7</span>
+		<span v-on:click="kpress">8</span>
+		<span v-on:click="kpress">9</span>
+		<span class="operator" v-on:click="kpress">+</span>
+		<span v-on:click="kpress">4</span>
+		<span v-on:click="kpress">5</span>
+		<span v-on:click="kpress">6</span>
+		<span class="operator" v-on:click="kpress">-</span>
+		<span v-on:click="kpress">1</span>
+		<span v-on:click="kpress">2</span>
+		<span v-on:click="kpress">3</span>
+		<span class="operator" v-on:click="kpress">/</span>
+		<span v-on:click="kpress">0</span>
+		<span v-on:click="kpress">.</span>
+		<span class="eval" v-on:click="kpress">=</span>
+		<span class="operator" v-on:click="kpress">*</span>
+	</div>
 </div>
-<!-- V Binding -->
-<div id="bind">
-    <ul>
-      <li v-for="x in todos">
-        {{ x.text }}
-      </li>
-    </ul>
-  </div>
-<p>
-<button onclick="myFunction()">Click Me!</button>
-</p>
 
-<script>
-var myObject = new Vue({
-  el: '#app',
-  data: {message: 'Hello Vue!'}
-})
-
-function myFunction() {
-    myObject.message = "Hello Pegah Ahadian from Vue Js :)";
-}
-// V Binding
-myObjectbind = new Vue({
-  el: '#bind',
-  data: {
-    todos: [
-      { text: 'Learn JavaScript' },
-      { text: 'Learn Vue.js' },
-      { text: 'Build Something Awesome' }
-    ]
-  }
-})
-</script>
+<!-- JS -->
+  <script src="https://unpkg.com/vue"></script>
+  <script src="js/calculator_vjs.js"></script>
 
 </body>
-    
+</html>
+
+<script>
+var app = new Vue({
+
+	el:'#calculator',
+
+	data: {
+		numberList : ['0','1','2','3','4','5','6','7','8','9','+','*','/','-','.'],
+		current:''
+	},
+	//lets listen to any key pressed on keyboard using the created step in view lifecycle
+	created: function () {
+            window.addEventListener('keypress', this.kpress)
+    },
+	
+	methods: {
+		
+		kpress: function(event)
+		{
+			
+			let key='';
+			//console.log((event.type));
+			if (event.type === 'keypress')
+				{ key = String.fromCharCode(event.keyCode); }
+			else //then click
+				{ key = event.target.innerText; }
+
+			//console.log((key)); 
+
+			if(this.numberList.indexOf(key) > -1)
+			{
+		        app.current += key;
+		    } 
+		    else if (key==='c' || key==='C')
+		    		{ this.clear();}
+		      else if (key==='=')
+		    		{this.equal();}
+			    else if (key===',')
+			    	{ app.current += '.';} //accept comma			
+
+		}, //kpress
+		clear: function(e) {this.current='';}, //clear
+		equal: function(e) {app.current = eval(app.current);}, //eval
+	} //methods
+
+});// calculator
+</script>
+
+    <style>
+      
+      /* Quick reset */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* A nice BG gradient */
+html {
+	height: 100%;
+	background: white radial-gradient(circle, #999 20%, #777);
+	background-size: cover;
+	font: bold 14px 'Open Sans', 'Segoe UI', 'Droid Sans', Tahoma, Arial, sans-serif;
+}
+
+#calculator {
+	width: 326px;
+	height: auto;
+	
+	margin: 100px auto;
+	padding: 20px 20px 9px;
+	
+	background: #26a69a;
+	border-radius: 3px;
+}
+
+/* Top portion */
+.top span.clear {
+	float: left;
+}
+
+.top .screen {
+	height: 40px;
+	width: 212px;
+	float: right;
+	padding: 0 10px;
+	background: rgba(0, 0, 0, 0.2);
+	border-radius: 3px;
+
+	font-size: 16px;
+	line-height: 40px;
+	color: white;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+	text-align: right;
+	letter-spacing: 1px;
+}
+
+/* Clear floats */
+.keys, .top {overflow: hidden;}
+
+.keys span, .top span.clear {
+	float: left;
+	position: relative;
+	top: 0;
+	cursor: pointer;
+	width: 66px;
+	height: 36px;
+	background: white;
+	border-radius: 3px;
+	margin: 0 7px 11px 0;
+	color: #888;
+	line-height: 36px;
+	text-align: center;
+	/* prevent selection of text inside keys */
+	user-select: none;
+	/* Smoothing out hover and active states using css3 transitions */
+	transition: all 0.2s ease;
+}
+
+/* Remove right margins from operator keys */
+/* style different type of keys (operators/evaluate/clear) differently */
+.keys span.operator {
+	background: #FFF8E2;
+	margin-right: 0;
+}
+
+.keys span.eval {
+	background: #8bc34a;;	
+	color: #333;
+}
+
+.top span.clear {
+	background: #f68991; 
+	color: white;
+}
+
+/* Some hover effects */
+.keys span:hover {
+	background: #03a9f4;	
+	color: white;
+}
+
+.keys span.operator:hover {
+	background: #FDB22B;
+	margin-right: 0;
+	color: white;
+}
+
+.keys span.eval:hover {
+	background: #abb850;
+	color: #ffffff;
+}
+
+.top span.clear:hover {
+	background: #e51c23;
+	color: white;
+}
+
+/* Simulating "pressed" effect on active state of the keys by removing the box-shadow and moving the keys down a bit */
+.keys span:active, span.eval:active, span.clear:active  {
+	top: 2px;
+}
+
+    </style>
