@@ -13,6 +13,11 @@
     :class="{ 'has-error': submitting && invalidEmail }"
     v-model="employee.email"
     @focus="clearStatus"/>
+       <label>Password</label>
+      <input type="password"
+    :class="{ 'has-error': submitting && invalidPassword }"
+    v-model="employee.password"
+    @focus="clearStatus"/>
       <p v-if="error && submitting" class="error-message">
     ❗Please fill out all required fields
   </p>
@@ -40,6 +45,7 @@
     this.employee = {
       name: '',
       email: '',
+      password:'',
     }
     this.error = false
     this.success = true
@@ -58,6 +64,7 @@
     employee: {
       name: '',
       email: '',
+      password:'',
     }
     }
   },
@@ -68,12 +75,17 @@
   invalidEmail() {
     return this.employee.email === ''
   },
+    invalidPassword() {
+    return this.employee.password === ''
+  },
 },
   }
 </script>
 <style scoped>
   form {
     margin-bottom: 2rem;
+    border: 2px solid rgba(20, 54, 126, 0.555);
+    padding: 30px;
   }
   [class*='-message'] {
     font-weight: 500;

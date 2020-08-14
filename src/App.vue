@@ -1,9 +1,12 @@
 <template>
   <div id="app" class="small-container">
     <img src="./assets/logo.png" alt="vue logo">
-    <h1>Login</h1>
-    <employee-table v-bind:employees="employees" @delete:employee="deleteEmployee"/>
+    <h1>Form</h1>
     <employeeform @add:employee="addEmployee" />
+    <hr>
+    <h1>Employee List</h1>
+        <employee-table :employees="employees" @delete:employee="deleteEmployee" @edit:employee="editEmployee"/>
+
   </div>
 </template>
 
@@ -27,6 +30,24 @@ export default {
   const newEmployee = { ...employee, id };
   this.employees = [...this.employees, newEmployee];
 },
+  deleteEmployee(id) {
+    this.employees = this.employees.filter(
+      employee => employee.id !== id
+    )
+  },
+  editEmployee(id, updatedEmployee) {
+  this.employees = this.employees.map(employee =>
+    employee.id === id ? updatedEmployee : employee
+  )
+},
+editMode(employee) {
+  this.cachedEmployee = Object.assign({}, employee)
+  this.editing = employee.id
+},
+cancelEdit(employee) {
+  Object.assign(employee, this.cachedEmployee)
+  this.editing = null;
+}
 
 },
   data() {
@@ -62,6 +83,7 @@ export default {
   button {
     background: #009435;
     border: 1px solid #009435;
+    margin-top: 15px;
   }
   .small-container {
     max-width: 680px;
